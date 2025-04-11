@@ -1,3 +1,4 @@
+
 # Fine Tuning Repo
 
 Welcome to the Fine Tuning Repo! This repository is dedicated to exploring various aspects of fine-tuning machine learning models. As I continue to learn and expand my understanding, this repo will evolve with more content and insights.
@@ -19,6 +20,35 @@ Welcome to the Fine Tuning Repo! This repository is dedicated to exploring vario
 
 ### 5. Evaluation
 - Techniques and metrics for evaluating the performance of fine-tuned models.
+
+## Repository Contents
+
+This repository contains the following directories and files:
+
+| Type      | Name                       |
+|-----------|----------------------------|
+| Directory | data_generation            |
+| Directory | slm_evaluation             |
+| Directory | slm_tuning                 |
+| File      | README.md                  |
+| File      | deepseek_with_CPU.ipynb    |
+| File      | deepseek_with_GPU.ipynb    |
+| File      | quantization_samples.ipynb |
+| File      | requirements.txt           |
+| File      | simple_model.py            |
+
+### Directories
+- **data_generation**: Contains scripts and data related to generating datasets.
+- **slm_evaluation**: Contains scripts and notebooks for evaluating the SLM (Small Language Model) models.
+- **slm_tuning**: Contains scripts and notebooks for tuning the SLM models.
+
+### Files
+- **README.md**: Provides an overview of the repository, including setup instructions, usage, and other relevant information.
+- **deepseek_with_CPU.ipynb**: Jupyter notebook for running DeepSeek model on CPU.
+- **deepseek_with_GPU.ipynb**: Jupyter notebook for running DeepSeek model on GPU.
+- **quantization_samples.ipynb**: Jupyter notebook containing examples of model quantization techniques.
+- **requirements.txt**: Lists all dependencies required to run the code in this repository.
+- **simple_model.py**: Python script defining a simple CNN Model to understand downcasting
 
 ## Note
 This repository will evolve as I add more content and increase my understanding of each aspect of fine-tuning.
