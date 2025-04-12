@@ -1,0 +1,17 @@
+{
+    "task_type":"generate",
+    "seed_dataset_source":
+    {
+        "access":"public",
+        "path":"Hypersniper/riddles_v1"
+    },
+    "synthetic_generation":
+    {
+        "use_llm":"true",
+        "llm_config":"",
+        "location_type":"local",
+        "location_path":"./Samples",
+        "total_number_samples":5000
+    }
+
+}
