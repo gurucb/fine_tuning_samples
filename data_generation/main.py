@@ -8,7 +8,6 @@ def main():
     logger.info("Initializng Dataclient...")
     data_client.execute_data_task()
 
-
 def configure_logging():  
     logging.basicConfig(
         level=logging.DEBUG,
