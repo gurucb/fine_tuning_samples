@@ -1,17 +1,23 @@
 {
     "task_type":"generate",
-    "seed_dataset_source":
+    "extraction":
     {
         "access":"public",
-        "path":"Hypersniper/riddles_v1"
+        "dataset_name":"Hypersniper/riddles_v1",
+        "split":"",
+        "destination_path":"sample_data"
     },
-    "synthetic_generation":
+    "generation":
     {
         "use_llm":"true",
         "llm_config":"",
-        "location_type":"local",
-        "location_path":"./Samples",
+        "prompt_config":"",
+        "seed_dataset_path":"",
+        "destination_type":"local",
+        "destination_path":"./Samples",
         "total_number_samples":5000
-    }
+    },
+    "transform":{},
+    "validation":{}
 
 }

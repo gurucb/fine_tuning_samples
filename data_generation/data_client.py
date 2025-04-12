@@ -15,10 +15,13 @@ class DataClient():
         self.logger = logging.getLogger(__name__)
         with  open(task_config_filepath) as tc:
             self.task_config = json.loads(tc.read())
-            print(self.task_config)
-
         self.logger.info("Data Client Intialized!!")
 
     #Perform specifie task against Hub and dataset. 
     def execute_data_task(self):
         self.logger.info(f"Starting data task {self.task_config["task_type"]} from ")
+        task_type = self.task_config["task_type"]
+        if task_type == "generate":
+            data_generator = DataGenerator(self.task_config)
+            data_generator.generate_data()
+
