@@ -10,9 +10,9 @@
     "generation":
     {
         "use_llm":"true",
-        "llm_config":"",
+        "llm_config":"env",
         "prompt_config":"",
-        "seed_dataset_path":"",
+        "seed_dataset_path":"sample_data/seed_dataset",
         "destination_type":"local",
         "destination_path":"./Samples",
         "total_number_samples":5000
