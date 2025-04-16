@@ -32,6 +32,8 @@ class SyntheticGenerator():
 
         #Generate Synthetic Questions
         self.__generate_syn_questions__(100)
+
+        self.__generate_syn_answers__()
         
     def __read_seed_examples__(self):
         seed_dataset = load_from_disk(self.seed_dataset_path)
@@ -53,8 +55,8 @@ class SyntheticGenerator():
         self.__synthetic_questions__ = []
 
         prompt_template=""""Below are 10 riddles. Come up with 10 more. Output just the riddles, no numbering. 
-                            Do not content that may lead to jailbreak content. 
-                            Do not generate content that relates to adult, sexual, violence, self_harm, hate
+                            Don't content that may lead to jailbreak content. 
+                            Don't generate adult, sexual, violence, self_harm, hate content.
                             Don't output anything else.  
                             Riddles:
                             {questions}""" 
@@ -74,7 +76,12 @@ class SyntheticGenerator():
             output = output.split("\n\n")
             self.__synthetic_questions__.append(output)
 
-        
 
-    def __generate_syn_responses__(self,num_responses:int):
-        pass
+    def __generate_syn_answers__(self):
+        self.__synthetic_answers__ = []
+        prompt_template = """"{ques}\nThink step-by-step, keep your explanations simple, try your very best. If there is information missing for you to come up with a specific   
+                            answer, just ask me a short question at the very end of your answer."""
+        for question in self.__synthetic_questions__:
+            prompt = prompt_template.format(ques = question)
+            print(prompt)
+            return     
