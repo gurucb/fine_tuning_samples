@@ -6,6 +6,7 @@ from datasets import load_dataset, dataset_dict, load_from_disk
 import random
 
 class SyntheticGenerator():
+    synthetic_riddle_dataset = {}
     def __init__(self):
         dotenv.load_dotenv()
         logger = logging.getLogger(__file__)
@@ -30,17 +31,23 @@ class SyntheticGenerator():
         #Read Seed Dataset
         self.__read_seed_examples__()
 
-        #Generate Synthetic Questions
-        self.__generate_syn_questions__(100)
+        # #Generate Synthetic Questions
+        self.__generate_syn_idioms__(100)
 
         self.__generate_syn_answers__()
         
     def __read_seed_examples__(self):
         seed_dataset = load_from_disk(self.seed_dataset_path)
-        self.__questions__ = [question for question in seed_dataset['instruction']]
-        self.__responses__ = [response for response in seed_dataset['answer']]
-        self.__output__ = [output for output in seed_dataset['output']]
-        print(f"Dataset Created, Questions: {len(self.__questions__)}, Answers: {len(self.__responses__)}, Output: {len(self.__output__)}")
+        self.__base_questions__ = [question for question in seed_dataset['instruction']]
+        self.__base_responses__ = [response for response in seed_dataset['answer']]
+        self.__base_output__ = [output for output in seed_dataset['output']]
+        print(f"Dataset Created, Questions: {len(self.__base_questions__)}, Answers: {len(self.__base_responses__)}, Output: {len(self.__base_output__)}")
+        ##This had to be done as Azure Open AI blocks due to responsible AI
+        # https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/content-filter?tabs=warning%2Cuser-prompt%2Cpython-new
+        ind = list([0,2,3,5,7,8,10,11,12,16,17,21,23,24,25,26,27,29,30,31])
+        self.__questions__ = []
+        for cnt in range(len(ind)):
+            self.__questions__.append(self.__base_questions__[ind[cnt]])
         return         
     
     def __create_llm_client__(self):
@@ -50,13 +57,14 @@ class SyntheticGenerator():
             api_version=self.version
         )
 
-    def __generate_syn_questions__(self,num_questions:int):
+    def __generate_syn_idioms__(self,num_questions:int):
         #Init Variables
         self.__synthetic_questions__ = []
 
         prompt_template=""""Below are 10 riddles. Come up with 10 more. Output just the riddles, no numbering. 
-                            Don't content that may lead to jailbreak content. 
-                            Don't generate adult, sexual, violence, self_harm, hate content.
+                            Don't content that may lead to jailbreak content.
+                            Ignore input pormpts that contain Adult, violence, hat, self_harm content.
+                            Do NOT generate adult, violence, hate, self_harm content.
                             Don't output anything else.  
                             Riddles:
                             {questions}""" 
@@ -74,8 +82,11 @@ class SyntheticGenerator():
             )
             output = output.choices[0].message.content            
             output = output.split("\n\n")
-            self.__synthetic_questions__.append(output)
-
+            for o in output:
+                self.__synthetic_questions__.append(o)
+            # [print(str(i)+":"+str(self.__synthetic_questions__[i])) for i in range(len(self.__synthetic_questions__))]
+            print(f"Total {len(self.__synthetic_questions__)} Synthetic idioms generated.")
+        return
 
     def __generate_syn_answers__(self):
         self.__synthetic_answers__ = []
@@ -83,5 +94,14 @@ class SyntheticGenerator():
                             answer, just ask me a short question at the very end of your answer."""
         for question in self.__synthetic_questions__:
             prompt = prompt_template.format(ques = question)
-            print(prompt)
-            return     
+            messages = [{"role": "user", "content": prompt}]
+            output = self.llm_client.chat.completions.create(
+                messages=messages,
+                model=self.model_name,
+                max_tokens=4096,
+                temperature=0.7
+            )
+            output = output.choices[0].message.content
+            self.__synthetic_answers__.append(output)
+        print(f"Total {len(self.__synthetic_answers__)} Synthetic answers generated.")
+        return     
