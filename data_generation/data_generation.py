@@ -22,7 +22,7 @@ class DataGenerator():
         # self.data_extractor.fetch_datasets(
         #                                         dataset_name=dataset_name,
         #                                         destination_path=destination_path
-                                            # )
+        #                                     )
         syn_config = self.task_config['generation']
         self.syn_generator.augument_data(syn_config)
 
